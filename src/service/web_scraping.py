@@ -54,6 +54,8 @@ def _scrape_service_get_books(category_name, category_url, tag, class_name):
         list: A list of books with their details.
     """
 
+    book_id = 1
+
     soups = _scrape_website(category_url)
 
     data = []
@@ -77,6 +79,7 @@ def _scrape_service_get_books(category_name, category_url, tag, class_name):
                         break
 
             data.append({
+                "id": book_id,
                 "title": title,
                 "price": price,
                 "stock": stock,
@@ -84,6 +87,8 @@ def _scrape_service_get_books(category_name, category_url, tag, class_name):
                 "rating": rating_number,
                 "image_url": image_url
             })
+            
+            book_id += 1
 
     return data
 
