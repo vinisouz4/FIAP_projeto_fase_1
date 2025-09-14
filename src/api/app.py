@@ -9,7 +9,7 @@ def create_app():
     # Inclui o roteador de scraping com prefixo e tags
     app.include_router(
         router_scraping,
-        prefix="/api",   # prefixo geral
+        prefix="/scraping",   # prefixo geral
         tags=["API"],   # tags extras
     )
 
