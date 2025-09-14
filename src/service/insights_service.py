@@ -37,19 +37,14 @@ def overview_statistics():
         return {"error": "No data available"}
 
     total_books = len(df)
-
-    print(df.dtypes)
-
-    # Arrumar o erro de string must be integer
     
-    average_price = sum(book["price"] for book in df) / total_books if total_books > 0 else 0
+    average_price = df["price"].mean() if not df.empty else 0
     
-    ratings = [book["rating"] for book in df]
-    rating_distribution = dict(Counter(ratings)) # Count occurrences of each rating
+    rating_distribution = df["rating"].value_counts().to_dict()
 
 
     return {
         "total_books": total_books,
-        "average_price": average_price,
+        "average_price": round(average_price, 2),
         "rating_distribution": rating_distribution
     }

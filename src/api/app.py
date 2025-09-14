@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from src.routes.scraping import router_scraping  # importa o router de scraping
-from src.routes.datas import router_books  # importa o router de books
-from src.routes.insights import router_insights  # importa o router de insights
+from src.routes.scraping_routes import router_scraping  # importa o router de scraping
+from src.routes.book_routes import router_books  # importa o router de books
+from src.routes.insights_routes import router_insights  # importa o router de insights
 
 def create_app():
     app = FastAPI(title="FIAP Projeto Fase 1", version="1.0.0")
@@ -9,7 +9,7 @@ def create_app():
     # Inclui o roteador de scraping com prefixo e tags
     app.include_router(
         router_scraping,
-        prefix="/scraping",   # prefixo geral
+        prefix="/api",   # prefixo geral
         tags=["API"],   # tags extras
     )
 
