@@ -47,18 +47,27 @@ def get_book_id(book_id):
 def search_books(title: str = None, category: str = None):
     try:
         df = _load_data()
-        
-        if category:
-            df = df[df['category'].str.lower().str.strip() == category.lower().strip()]
+
         if title:
             df = df[df['title'].str.lower().str.contains(title.lower().strip(), na=False)]
+        
+        elif category:
+            df = df[df['category'].str.lower().str.strip() == 'travel']
+
+        elif title and category:
+            df = df[
+                (df['title'].str.lower().str.contains(title.lower().strip(), na=False)) &
+                (df['category'].str.lower().str.strip() == category.lower().strip())
+            ]
+
         if not df.empty:
-            logger.INFO(f"Records found for category '{category}' and/or title '{title}'.")
+            logger.INFO(f"Records found for title='{title}' and category='{category}'.")
+            logger.INFO(f"Filtered DataFrame: {df}")
             return df.to_dict(orient='records')
         else:
-            logger.WARNING(f"No records found for category '{category}' and/or title '{title}'.")
+            logger.WARNING(f"No records found for title='{title}' and category='{category}'.")
             return []
-    
+
     except Exception as e:
         logger.ERROR(f"Error searching records: {e}")
         return []

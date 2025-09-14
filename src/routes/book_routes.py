@@ -52,7 +52,7 @@ async def get_book_by_id(book_id: str):
 @router_books.get("/v1/books/search/", response_model=List[Book])
 async def search(title: Optional[str] = None, category: Optional[str] = None):
     try:
-        books = search_books(category, title)
+        books = search_books(title, category)
         if not books:
             raise HTTPException(status_code=404, detail="No books found")
         return books
