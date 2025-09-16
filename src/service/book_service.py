@@ -17,7 +17,17 @@ def _load_data():
         logger.ERROR(f"Error loading data: {e}")
         return pd.DataFrame()  # retorna DataFrame vazio em caso de erro
 
+def get_categories():
+    try:
+        
+        categories = pd.read_csv("./src/data/categories_data.csv")
+        
+        categories.drop(columns=['link'], inplace=True)
 
+        return categories.to_dict(orient='records')
+    except Exception as e:
+        logger.ERROR(f"Error retrieving categories: {e}")
+        return None
     
 def get_all_books():
     try:

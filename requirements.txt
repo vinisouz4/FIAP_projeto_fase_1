@@ -6,3 +6,4 @@ fastapi[standard]
 uvicorn
 sqlalchemy
 colorlog
+python-jose[cryptography]
