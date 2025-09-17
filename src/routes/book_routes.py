@@ -3,14 +3,16 @@ from typing import Optional, List
 
 from src.service.book_service import get_all_books, get_book_id, search_books, get_categories
 from src.models.book_models import Book, HealthResponse, Category
-from src.service.auth_service import verify_token 
+from src.service.auth_service import current_user
 
 
 router_books = APIRouter(prefix="/books")
 
+user_dependency = Depends(current_user)
+
 
 @router_books.get("/v1/books", response_model=List[Book])
-async def get_books(user: str = Depends(verify_token)):
+async def get_books(user: str = user_dependency):
     """
     Extract data from a website based on the specified url and update the books database.
     Args:
@@ -30,7 +32,7 @@ async def get_books(user: str = Depends(verify_token)):
     
 
 @router_books.get("/v1/categories", response_model=List[Category])
-async def get_category():
+async def get_category(user: str = user_dependency):
     """
     Retrieve all book categories.
     Returns:
@@ -46,7 +48,7 @@ async def get_category():
 
     
 @router_books.get("/v1/books/{book_id}", response_model=Book)
-async def get_book_by_id(book_id: str):
+async def get_book_by_id(book_id: str, user: str = user_dependency):
     """
     Retrieve a specific book record by its ID.
     Args:
@@ -67,7 +69,7 @@ async def get_book_by_id(book_id: str):
         raise HTTPException(status_code=500, detail=str(e))
     
 @router_books.get("/v1/books/search/", response_model=List[Book])
-async def search(title: Optional[str] = None, category: Optional[str] = None):
+async def search(title: Optional[str] = None, category: Optional[str] = None, user: str = user_dependency):
     try:
         books = search_books(title, category)
         if not books:
@@ -78,7 +80,7 @@ async def search(title: Optional[str] = None, category: Optional[str] = None):
 
     
 @router_books.get("/v1/health", response_model=HealthResponse)
-async def health_check():
+async def health_check(user: str = user_dependency):
     try:
         books = get_all_books()
         return HealthResponse(

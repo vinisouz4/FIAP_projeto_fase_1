@@ -1,58 +1,29 @@
-from fastapi import APIRouter, HTTPException
-from typing import List
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 
-from src.service.auth_service import create_access_token, recreate_access_token
-from src.models.auth_models import LoginRequest, TokenRefresh
-
+from src.service.auth_service import create_access_token, authenticate_user
+from src.models.auth_models import Token
+from src.log.logs import LoggerHandler
+from src.core.configs import Settings
 
 
 router_auth = APIRouter(prefix="/auth")
 
+settings = Settings()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
-@router_auth.post("/v1/login")
-async def login(request: LoginRequest):
-    """
-    Authenticate a user and generate access and refresh tokens.
-    Args:
-        request (LoginRequest): The login request body containing username and password.
-    Returns:
-        dict: A dictionary containing the access and refresh tokens.
-    """
+@router_auth.post("/login", response_model=Token)
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+
     try:
-        # Dummy authentication logic (replace with real authentication)
-        if request.username == "admin" and request.password == "password":
-            user_data = {"sub": request.username}
-            
-            access_token = create_access_token(data=user_data)
+        user = authenticate_user(form_data.username, form_data.password)
 
-            return {
-                "access_token": access_token,
-                "token_type": "bearer"
-            }
-        else:
-            raise HTTPException(status_code=401, detail="Invalid username or password")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
-@router_auth.post("/v1/refresh", response_model=TokenRefresh)
-async def refresh_token(token: str):
-    """
-    Refresh the access token using a valid refresh token.
-    Args:
-        token (str): The refresh token.
-    Returns:
-        dict: A dictionary containing the new access token.
-    """
-    try:
-        # Dummy logic to decode and validate the refresh token (replace with real validation)
-        # Here we just assume the token is valid and contains the username
-        user_data = {"sub": "admin"}  # Replace with actual data extracted from the token
-        
-        new_access_token = recreate_access_token(data=user_data)
+        if not user:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
 
-        return {
-            "access_token": new_access_token,
-            "token_type": "bearer"
-        }
+        access_token = create_access_token(username=user["username"])
+
+        return Token(access_token=access_token, token_type="bearer")
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal Server Error")

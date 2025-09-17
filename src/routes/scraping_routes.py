@@ -1,10 +1,15 @@
 # src/routers/scraping_router.py
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+
 from src.service.web_scraping_service import Scraper
+from src.service.auth_service import current_user
+
 
 router_scraping = APIRouter(prefix="/scraping")
+
+user_dependency = Depends(current_user)
 
 
 # Modelo para receber URL de forma validada
@@ -13,7 +18,7 @@ class ScrapingRequest(BaseModel):
 
 
 @router_scraping.post("/v1/update_bd")
-async def update_bd(request: ScrapingRequest):
+async def update_bd(request: ScrapingRequest, user: str = user_dependency):
     """
     Extrai todos os livros de um site e atualiza a base de dados.
     """
