@@ -8,3 +8,4 @@ sqlalchemy
 colorlog
 python-jose[cryptography]
 passlib[bcrypt]
+scikit-learn
