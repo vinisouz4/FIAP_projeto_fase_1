@@ -3,6 +3,10 @@ from datetime import datetime
 import colorlog
 from zoneinfo import ZoneInfo  # para fuso horário
 
+"""
+Configuração dos logs
+"""
+
 class LoggerHandler:
     def __init__(self, context="Log", level=logging.INFO):
         self.logger = logging.getLogger(__name__)

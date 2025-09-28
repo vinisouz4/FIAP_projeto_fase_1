@@ -3,17 +3,18 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 
 from src.service.auth_service import create_access_token, authenticate_user
 from src.models.auth_models import Token
-from src.log.logs import LoggerHandler
-from src.core.configs import Settings
 
 
 router_auth = APIRouter(prefix="/auth")
 
-settings = Settings()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
 @router_auth.post("/login", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+
+    """
+    Método para validação de usuário e senha, e geração de token
+    """
 
     try:
         user = authenticate_user(form_data.username, form_data.password)

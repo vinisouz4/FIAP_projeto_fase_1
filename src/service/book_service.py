@@ -6,6 +6,13 @@ logger = LoggerHandler(__name__)
 
 
 def _load_data():
+
+    """
+    Carrega os dados do CSV e realiza o pré-processamento necessário.
+    Retorno:
+        - pd.DataFrame: DataFrame com os dados dos livros
+    """
+
     try:
         df = pd.read_csv("./src/data/books_data.csv")
 
@@ -27,18 +34,34 @@ def get_categories():
         return categories.to_dict(orient='records')
     except Exception as e:
         logger.ERROR(f"Error retrieving categories: {e}")
-        return None
+        return []
     
 def get_all_books():
+
+    """
+    Recupera todos os registros de livros do CSV.
+    Retorno:
+        - List[dict]: Lista de dicionários, cada um representando um livro
+    """
+
     try:
         df = _load_data()
         
         return df.to_dict(orient='records')
     except Exception as e:
         logger.ERROR(f"Error retrieving all books: {e}")
-        return None
+        return []
     
 def get_book_id(book_id):
+
+    """
+    Recupera um registro de livro específico pelo ID.
+    Parâmetros:
+        - book_id (str): ID do livro a ser recuperado
+    Retorno:
+        - dict: Dicionário representando o livro, ou None se não encontrado
+    """
+
     try:
         df = _load_data()
         
@@ -55,6 +78,16 @@ def get_book_id(book_id):
         return None
     
 def search_books(title: str = None, category: str = None):
+
+    """
+    Pesquisa livros por título e/ou categoria.
+    Parâmetros:
+        - title (str, opcional): Título ou parte do título do livro
+        - category (str, opcional): Categoria do livro
+    Retorno:
+        - List[dict]: Lista de dicionários representando os livros encontrados
+    """
+
     try:
         df = _load_data()
 

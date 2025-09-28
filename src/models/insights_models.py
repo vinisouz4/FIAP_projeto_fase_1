@@ -7,8 +7,8 @@ class Overview(BaseModel):
 
 class Category(BaseModel):
     category: str
-    title: int
-    price: float
+    total_category: int
+    average_price: float
 
 class TopRatedBook(BaseModel):
     id: str

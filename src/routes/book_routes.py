@@ -47,7 +47,7 @@ async def get_category(user: str = user_dependency):
 
 
     
-@router_books.get("/v1/books/{book_id}", response_model=Book)
+@router_books.get("/v1/{book_id}", response_model=Book)
 async def get_book_by_id(book_id: str, user: str = user_dependency):
     """
     Retrieve a specific book record by its ID.
@@ -68,7 +68,7 @@ async def get_book_by_id(book_id: str, user: str = user_dependency):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@router_books.get("/v1/books/search/", response_model=List[Book])
+@router_books.get("/v1/search/", response_model=List[Book])
 async def search(title: Optional[str] = None, category: Optional[str] = None, user: str = user_dependency):
     try:
         books = search_books(title, category)

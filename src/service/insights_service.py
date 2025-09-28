@@ -6,6 +6,13 @@ logger = LoggerHandler(__name__)
 
 
 def _load_data():
+
+    """
+    Carrega os dados do CSV e realiza o pré-processamento necessário.
+    Retorno:
+        - pd.DataFrame: DataFrame com os dados dos livros
+    """
+
     try:
         df = pd.read_csv("./src/data/books_data.csv")
 
@@ -45,6 +52,14 @@ def overview_statistics():
     }
 
 def get_categories_insights():
+
+    """
+    Recupera insights sobre categorias de livros.
+    Retorno:
+        - List[dict]: Lista de dicionários, cada um representando uma categoria com
+            total de livros e preço médio
+    """
+
     try:
         
         categories = _load_data()
@@ -58,13 +73,29 @@ def get_categories_insights():
 
         categories_grouped["price"] = categories_grouped["price"].round(2)
 
+        categories_grouped.rename(
+            columns={
+                'title': 'total_category', 
+                'price': 'average_price'
+            }, 
+            inplace=True
+        )
+
         logger.INFO("Categories retrieved successfully for insights.")
         return categories_grouped.to_dict(orient='records')
     except Exception as e:
         logger.ERROR(f"Error retrieving categories for insights: {e}")
-        return None
+        return []
     
 def get_top_rated_books():
+
+    """
+    Recupera os livros com as melhores avaliações.
+    Retorno:
+        - List[dict]: Lista de dicionários, cada um representando um livro
+            com as melhores avaliações
+    """
+
     try:
         df = _load_data()
         
@@ -83,10 +114,21 @@ def get_top_rated_books():
         return top_rated.to_dict(orient='records')
     except Exception as e:
         logger.ERROR(f"Error retrieving top rated books: {e}")
-        return None
+        return []
     
 
 def get_price_range(min_price: float, max_price: float):
+
+    """
+    Recupera os livros dentro de uma faixa de preço específica.
+    Parâmetros:
+        - min_price (float): Preço mínimo
+        - max_price (float): Preço máximo
+    Retorno:
+        - List[dict]: Lista de dicionários, cada um representando um livro
+            dentro da faixa de preço
+    """
+
     try:
         df = _load_data()
         
@@ -105,4 +147,5 @@ def get_price_range(min_price: float, max_price: float):
         return filtered_books.to_dict(orient='records')
     except Exception as e:
         logger.ERROR(f"Error filtering books by price range: {e}")
-        return None
+        return []
+    
