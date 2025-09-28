@@ -57,11 +57,77 @@ PORT = 8000
 > URL API: *https://fiap-projeto-fase-1.onrender.com/docs* 
 
 #### Autenticação
+> /api/auth/login
 - Usuário padrão (para testes): __admin/admin__ - apenas para teste e validação do projeto;
 - O endpoint /auth/login, retorna um JWT com período de experiação determinado dentro do código;
 - No Swagger UI, clique em Authorize e cole o Bearer {token}
 
 #### Endpoints
-- 
+1. __Update Data__
+
+    >/api/scraping/v1/update_data
+
+    - Rota para realizar a atualização do banco de dados de Books e Categories;
+    
+    - Todos os dados são em um banco de dados CSV dentro da estrutura de pastas do código.
+    
+
+2. __Books__
+    
+    > /api/v1/books
+    
+    - Retorna todos os livros que possui dentro do banco de dados.
+
+    > /api/v1/categories
+    
+    - Retorna todas as categorias encontradas no site.
+
+    > /api/v1/books/{book_id}
+
+    - Retorna o livro filtrado pelo ID do mesmo.
+
+    > /api/v1/books/search/
+
+    - Retorna todos os livros filtrados pelo Titulo ou Categoria.
+
+    > /api/v1/health
+
+    - Valida se a API está ativa e retornando o status 200.
+
+3. __Insights__
+
+    > /api/insights/v1/stats/overview
+
+    - Retorna os seguintes dados:
+
+        - *total_book* -> Total de livros no banco de dados;
+
+        - *average_price* -> Retorna o preço médio geral dos livros;
+
+        - *rating_distribution* -> Retorna a quantidade de livros por avaliação.
+
+    > /api/insights/v1/stats/categories
+
+    - Retorna os seguintes dados:
+
+        - *category* -> O nome da categoria;
+
+        - *count_category* -> Total de livros por categoria;
+
+        - *average_price* -> Preço médio dos livros por categoria.
+
+    > /api/insights/v1/stats/top-rated
+
+    - Retorna os livros com mais avaliação, gerando um ranking do mais bem avaliado até o menos avaliado.
+
+    > /api/insights/v1/stats/price-range/{min_price}/{max_price}
+
+    - Realiza um filtro entre um range de valor minimo até valor maximo, retornando apenas os livros dentro do range de filtros.
+    
+## Video Apresentação
+
+## Diagrama de Arquitetura
+
+
 
 
