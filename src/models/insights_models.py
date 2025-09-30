@@ -23,3 +23,15 @@ class PriceRangeBook(BaseModel):
     price: float
     rating: int
     category: str
+
+class BestValueBook(BaseModel):
+    id: str
+    title: str
+    price: float
+    rating: int
+    category: str
+    value_ratio: float
+
+class CategoryByPrice(BaseModel):
+    price_range: str
+    count: int

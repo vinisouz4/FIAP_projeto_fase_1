@@ -149,3 +149,60 @@ def get_price_range(min_price: float, max_price: float):
         logger.ERROR(f"Error filtering books by price range: {e}")
         return []
     
+
+def get_best_value():
+    
+    """
+    Recupera os livros com a melhor relação custo-benefício (preço/avaliação).
+    Retorno:
+        - List[dict]: Lista de dicionários, cada um representando um livro
+            com a melhor relação custo-benefício
+    """
+
+    try:
+        df = _load_data()
+
+        df["value_ratio"] = (df["price"] / df["rating"]).round(2)
+        best_value = df.sort_values(
+            by='value_ratio',
+            ascending=True
+        )
+
+        best_value.drop(
+            columns=["image_url", "stock"],
+            inplace=True
+        )
+
+        logger.INFO("Best value books retrieved successfully.")
+
+        return best_value.to_dict(orient='records')
+    except Exception as e:
+        logger.ERROR(f"Error retrieving best value books: {e}")
+        return []
+    
+
+def get_group_by_price():
+
+    """
+    Agrupa os livros por faixa de preço -> Cheap, Medium ou Expensive.
+    Retorno:
+        - dict: Dicionário com faixas de preço como chaves e listas de livros como valores
+    """
+
+    try:
+        df = _load_data()
+        
+        bins = [0, 20, 50, float('inf')]
+        labels = ["cheap", "medium", "expensive"]
+        
+        df['price_range'] = pd.cut(df['price'], bins=bins, labels=labels, right=False)
+        
+        df_grouped = df["price_range"].value_counts().reset_index()
+        df_grouped.columns = ["price_range", "count"]
+
+        logger.INFO("Books grouped by price range successfully.")
+        
+        return df_grouped.to_dict(orient="records")
+    except Exception as e:
+        logger.ERROR(f"Error grouping books by price range: {e}")
+        return []
