@@ -127,6 +127,7 @@ PORT = 8000
 ## Video Apresentação
 
 ## Diagrama de Arquitetura
+![Diagrama do Projeto](src/docs/Scraping.png)
 
 
 
