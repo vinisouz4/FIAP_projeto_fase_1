@@ -79,15 +79,3 @@ async def search(title: Optional[str] = None, category: Optional[str] = None, us
         raise HTTPException(status_code=500, detail=str(e))
 
     
-@router_books.get("/v1/health", response_model=HealthResponse)
-async def health_check(user: str = user_dependency):
-    try:
-        books = get_all_books()
-        return HealthResponse(
-            status="OK",
-            code=200,
-            message="API is running and data is accessible.",
-            records_count=len(books)
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))

@@ -3,6 +3,7 @@ from src.routes.scraping_routes import router_scraping
 from src.routes.book_routes import router_books  
 from src.routes.insights_routes import router_insights  
 from src.routes.auth_routes import router_auth  
+from src.routes.health_routes import router_health
 
 """
 Arquivo responsável pela organização das rotas da API
@@ -16,6 +17,12 @@ def create_app():
         router_auth,
         prefix="/api",   
         tags=["Auth"],
+    )
+
+    app.include_router(
+        router_health,
+        prefix="/api",
+        tags=["Health"],
     )
 
     app.include_router(

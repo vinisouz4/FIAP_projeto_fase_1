@@ -25,8 +25,6 @@ async def update_bd(request: ScrapingRequest, user: str = user_dependency):
     try:
 
         scraper = Scraper(base_url=request.url)
-
-        print(scraper.base_url)
         
         books = scraper.scrape_all_books()
         

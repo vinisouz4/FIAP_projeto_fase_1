@@ -6,12 +6,14 @@ import uuid
 import time
 
 from src.log.logs import LoggerHandler
+from src.repository.supabase import Supabase
 
 
 class Scraper:
     def __init__(self, base_url: str):
         self.base_url = base_url.rstrip("/")
         self.logger = LoggerHandler(context="WebScraping")
+        self.supabase = Supabase()
 
     def _get_soup_pages(self, url: str):
         """
@@ -19,6 +21,8 @@ class Scraper:
         """
         soups = []
         next_page = url
+
+        self.logger.INFO(f"Iniciando scraping em: {url}")
 
         while next_page:
             try:
@@ -38,7 +42,7 @@ class Scraper:
             else:
                 next_page = None
 
-            time.sleep(1)  # evita sobrecarregar o servidor
+            time.sleep(1)
 
         return soups
 
@@ -66,6 +70,11 @@ class Scraper:
             self.logger.INFO(f"{len(data)} categorias extraídas com sucesso!")
             df = pd.DataFrame(data)
             df.to_csv("./src/data/categories_data.csv", index=False, encoding="utf-8")
+
+            self.logger.INFO("Categorias salvas no CSV, iniciando inserção no Supabase...")
+
+            self.supabase.insert("categories", data)
+
             self.logger.INFO("Arquivo 'categories_data.csv' salvo com sucesso!")
 
         return data
@@ -95,7 +104,7 @@ class Scraper:
                     rating_number = next((mapping[cls] for cls in rating_tag.get("class", []) if cls in mapping), 0)
 
                 books.append({
-                    "id": str(uuid.uuid4()),  # id único global
+                    "id": str(uuid.uuid4()),
                     "title": title,
                     "price": price_text,
                     "stock": stock,
@@ -126,6 +135,8 @@ class Scraper:
             self.logger.INFO(f"{len(all_books)} livros extraídos no total.")
             df = pd.DataFrame(all_books)
             df.to_csv("./src/data/books_data.csv", index=False, encoding="latin1")
+
+            self.supabase.insert("book", all_books)
             self.logger.INFO("Arquivo 'books_data.csv' salvo com sucesso!")
 
         return all_books
