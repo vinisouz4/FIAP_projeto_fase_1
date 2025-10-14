@@ -125,6 +125,8 @@ PORT = 8000
     - Realiza um filtro entre um range de valor minimo até valor maximo, retornando apenas os livros dentro do range de filtros.
     
 ## Video Apresentação
+Link: https://drive.google.com/file/d/1LWM9v6pmWdnLECYVYU-Tq7jgjwK6vevv/view?usp=sharing
+
 
 ## Diagrama de Arquitetura
 ![Diagrama do Projeto](src/docs/Scraping.png)
